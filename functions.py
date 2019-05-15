@@ -28,7 +28,7 @@ def medianconvolution(mask, image):
     for i in range(0, rrow):
         for j in range(0, rcol):
             part = image[i:i+mrow, j:j+mcol]
-            resImage[i][j] = np.min(part * mask)
+            resImage[i][j] = np.median(part * mask)
     return resImage
 
 
