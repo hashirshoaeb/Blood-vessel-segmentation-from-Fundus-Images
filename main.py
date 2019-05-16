@@ -5,10 +5,10 @@ import functions as f
 import operationfunctions as of
 
 array = cv.imread("IM000001/IM000001.JPG",0)
-cv.imwrite("haha.JPG",array)
-array1 = cv.imread("IM000001/IM000001--vessels.jpg")
+array1 = cv.imread("IM000001/IM000001--vessels.jpg",0)
+ret, tarray = cv.threshold(array1,120,255,cv.THRESH_BINARY)
 
-
+cv.imwrite("haha.JPG",tarray)
 kernel = np.array([[1, 1, 1, 1, 1, 1],
                    [1, 1, 1, 1, 1, 1],
                    [1, 1, 1, 1, 1, 1],
@@ -17,6 +17,11 @@ kernel = np.array([[1, 1, 1, 1, 1, 1],
                    [1, 1, 1, 1, 1, 1]])
 res = of.morphology(array, kernel)
 cv.imwrite("hahaha.JPG", res)
+
+
+of.performancePrams(res, tarray)
+
+
 
 
 # /////   ---- Extra ----   /////
