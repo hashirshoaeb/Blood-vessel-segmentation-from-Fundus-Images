@@ -4,22 +4,31 @@ import math as m
 import functions as f
 import operationfunctions as of
 
-array = cv.imread("IM000001/IM000001.JPG",0)
-array1 = cv.imread("IM000001/IM000001--vessels.jpg",0)
-ret, tarray = cv.threshold(array1,120,255,cv.THRESH_BINARY)
+# array1 = cv.imread("IM000001/IM000001--vessels.jpg", 0)
+# ret, tarray = cv.threshold(array1, 120, 255, cv.THRESH_BINARY)
 
-cv.imwrite("haha.JPG",tarray)
-kernel = np.array([[1, 1, 1, 1, 1, 1],
-                   [1, 1, 1, 1, 1, 1],
-                   [1, 1, 1, 1, 1, 1],
-                   [1, 1, 1, 1, 1, 1],
-                   [1, 1, 1, 1, 1, 1],
-                   [1, 1, 1, 1, 1, 1]])
-res = of.morphology(array, kernel)
-cv.imwrite("hahaha.JPG", res)
+path = [["IM000001", "IM000001.JPG", "IM000001--vessels.jpg", "Morphology.jpg", "ConComp.jpg", "Adaptive.jpg", "Canny.jpg, Gabor.jpg", "RegGrowing.jpg"],
+        ["IM000004", "IM000004.JPG", "IM000004--vessels.jpg", "Morphology.jpg", "ConComp.jpg", "Adaptive.jpg", "Canny.jpg, Gabor.jpg", "RegGrowing.jpg"],
+        ["IM000023", "IM000023.JPG", "IM000023--vessels.jpg", "Morphology.jpg", "ConComp.jpg", "Adaptive.jpg", "Canny.jpg, Gabor.jpg", "RegGrowing.jpg"],
+        ["IM000024", "IM000024.JPG", "IM000024--vessels.jpg", "Morphology.jpg", "ConComp.jpg", "Adaptive.jpg", "Canny.jpg, Gabor.jpg", "RegGrowing.jpg"],
+        ["IM000135", "IM000135.JPG", "IM000135--vessels.jpg", "Morphology.jpg", "ConComp.jpg", "Adaptive.jpg", "Canny.jpg, Gabor.jpg", "RegGrowing.jpg"],
+        ["IM000136", "IM000136.JPG", "IM000136--vessels.jpg", "Morphology.jpg", "ConComp.jpg", "Adaptive.jpg", "Canny.jpg, Gabor.jpg", "RegGrowing.jpg"],
+        ["IM000167", "IM000167.JPG", "IM000167--vessels.jpg", "Morphology.jpg", "ConComp.jpg", "Adaptive.jpg", "Canny.jpg, Gabor.jpg", "RegGrowing.jpg"],
+        ["IM000168", "IM000168.JPG", "IM000168--vessels.jpg", "Morphology.jpg", "ConComp.jpg", "Adaptive.jpg", "Canny.jpg, Gabor.jpg", "RegGrowing.jpg"],
+        ["IM000189", "IM000189.JPG", "IM000189--vessels.jpg", "Morphology.jpg", "ConComp.jpg", "Adaptive.jpg", "Canny.jpg, Gabor.jpg", "RegGrowing.jpg"],
+        ["IM000209", "IM000209.JPG", "IM000209--vessels.jpg", "Morphology.jpg", "ConComp.jpg", "Adaptive.jpg", "Canny.jpg, Gabor.jpg", "RegGrowing.jpg"]]
 
 
-of.performancePrams(res, tarray)
+
+# Morphology
+kernel = np.ones((6, 6), np.uint8)
+for p in path:
+    imageArray = cv.imread(p[0]+"/"+p[1], 0)
+    res = of.morphology(imageArray, kernel)
+    cv.imwrite(p[0]+"/"+p[3], res)
+
+
+# of.performancePrams(res, tarray)
 
 
 
@@ -53,9 +62,28 @@ of.performancePrams(res, tarray)
 #     for j in range(0,col):
 #         array[i][j] = f.normalization(array[i][j],minn, maxx)
 # kernel = np.ones((7,7), np.uint8)
-# >>> cv2.getStructuringElement(cv2.MORPH_CROSS,(5,5))
+# >>> cv.getStructuringElement(cv.MORPH_CROSS,(5,5))
 # array([[0, 0, 1, 0, 0],
 #        [0, 0, 1, 0, 0],
 #        [1, 1, 1, 1, 1],
 #        [0, 0, 1, 0, 0],
 #        [0, 0, 1, 0, 0]], dtype=uint8)
+# kernel = np.ones((7, 7), np.uint8)
+#
+# gradient = cv.morphologyEx(img, cv.MORPH_GRADIENT, kernel)
+#
+# img = 255 - gradient
+# print("min and max in img", np.min(img), np.max(img))
+# closing = cv.morphologyEx(img, cv.MORPH_CLOSE, kernel)
+# closing = cv.morphologyEx(closing, cv.MORPH_CLOSE, kernel)
+# dilation = cv.dilate(closing, kernel, iterations=1)
+#
+# ret, dilation = cv.threshold(dilation, 245, 255, cv.THRESH_BINARY)
+#
+# cv.imwrite("hth.JPG", dilation)
+
+# /////     ---- LINKS ----    //////
+# https://datascience.stackexchange.com/questions/30589/how-to-interpret-fpr-and-tpr-in-roc-curve
+# https://www.sciencedirect.com/science/article/pii/S2210832718301546
+# https://docs.opencv.org/3.4/d4/d86/group__imgproc__filter.html#gaeb1e0c1033e3f6b891a25d0511362aeb
+# https://opencv-python-tutroals.readthedocs.io/en/latest/py_tutorials/py_imgproc/py_morphological_ops/py_morphological_ops.html
