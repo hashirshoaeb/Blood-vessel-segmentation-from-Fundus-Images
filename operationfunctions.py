@@ -15,10 +15,9 @@ def morphology(image, kernel):
     kernel1 = np.ones((3, 3), np.uint8)
     array = cv.morphologyEx(array, cv.MORPH_ERODE, kernel1)
 
-    print("normalization max min", np.max(array), np.min(array))
-
-    row, col = np.shape(array)
-    minn, maxx = np.min(array), np.max(array)
+    # print("normalization max min", np.max(array), np.min(array))
+    # row, col = np.shape(array)
+    # minn, maxx = np.min(array), np.max(array)
     # for i in range(0, row):
     #     for j in range(0, col):
     #         array[i][j] = f.normalization(array[i][j], minn, maxx)
@@ -50,5 +49,26 @@ def performancePrams(yourImage, givenImage):
     TP, TN, FN, FP = counts
     TPR = TP / (TP + FN)
     FPR = FP / (TN + FP)
-    print([TPR, FPR])
-    return [TPR, FPR]
+    diceCoff = 2*TP / (FN + (2*TP) + FP)
+    print([TPR, FPR, diceCoff])
+    return [TPR, FPR, diceCoff]
+
+
+
+# Parameters
+# image	8-bit input image.
+# edges	output edge map; single channels 8-bit image, which has the same size as image .
+# threshold1	first threshold for the hysteresis procedure.
+# threshold2	second threshold for the hysteresis procedure.
+# apertureSize	aperture size for the Sobel operator.
+# L2gradient	a flag, indicating whether a more accurate L2 norm =(dI/dx)2+(dI/dy)2√ should be used to calculate
+# the image gradient magnitude ( L2gradient=true ),
+# or whether the default L1 norm =|dI/dx|+|dI/dy| is enough ( L2gradient=false ).
+def canny(image):
+    array = image[:]
+    print("Start Canny Operation")
+    # array = cv.blur(array, (5, 5))
+    # array = cv.Canny(array, 1, 20, L2gradient=False)
+    array = cv.Canny(array,30,30, L2gradient = False)
+    array = 255 - array
+    return array
