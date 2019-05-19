@@ -3,7 +3,7 @@ import numpy as np
 import math as m
 import functions as f
 import operationfunctions as of
-
+import matplotlib.pyplot as plt
 # array1 = cv.imread("IM000001/IM000001--vessels.jpg", 0)
 # ret, tarray = cv.threshold(array1, 120, 255, cv.THRESH_BINARY)
 
@@ -51,6 +51,59 @@ for p in path:
 
 
 
+img = cv.imread('IM000001/IM000001.JPG', 0)
+
+def my_region_grow():
+    size = np.shape(img)
+    M = np.zeros(size, dtype=np.uint8)
+    thresh = 6
+
+    plt.figure()
+    plt.imshow(img)
+    plt.gray()
+
+    print('\nPlease select the initial seed point')
+
+    pseed = plt.ginput(1)
+    p = int(pseed[0][0])
+    q = int(pseed[0][1])
+
+    seed = []
+    seed.append(p)
+    seed.append(q)
+
+    print('you clicked:', seed)
+
+    plt.close()
+
+    my_region = np.zeros(size, dtype=np.uint8)
+    my_region[p][q] = 255
+    M[p][q] = 1
+    check_list = [seed]
+
+    def check_neighbours(x, y):
+        for i in range(-1, 2):
+            for j in range(-1, 2):
+                if x + i < size[0] and y + j < size[1]:
+                    if M[x + i][y + j] != 1:
+                        if abs(int(img[x + i][y + j]) - int(img[p][q])) <= thresh:
+                            z = [x + i, y + j]
+                            my_region[x + i][y + j] = 255
+                            check_list.append(z)
+                    M[x + i][y + j] = 1
+        check_list.remove([x, y])
+
+    def region_grow():
+        while len(check_list) > 0:
+            z = check_list[0]
+            x = z[0]
+            y = z[1]
+
+            check_neighbours(x, y)
+
+    region_grow()
+    my_region = np.invert(my_region)
+    cv.imwrite('Region.jpg', my_region)
 
 
 
@@ -140,9 +193,10 @@ for p in path:
 # http://homepages.inf.ed.ac.uk/rbf/CVonline/LOCAL_COPIES/MARBLE/low/edges/canny.htm
 # https://docs.opencv.org/3.1.0/d4/d86/group__imgproc__filter.html#gad78703e4c8fe703d479c1860d76429e6
 # https://www.numpy.org/devdocs/reference/generated/numpy.dstack.html#numpy.dstack
-
-
-
+# https://docs.opencv.org/2.4/modules/contrib/doc/facerec/colormaps.html
+# https://www.tutorialspoint.com/opencv/opencv_adaptive_threshold.htm
+# https://docs.opencv.org/3.4.3/d7/d4d/tutorial_py_thresholding.html
+# https://docs.opencv.org/3.4.3/d7/d1b/group__imgproc__misc.html#ga72b913f352e4a1b1b397736707afcde3
 
 # SAMEEEEEEN
 # def gabor_fn(sigma, theta, Lambda, psi, gamma):

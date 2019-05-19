@@ -72,3 +72,69 @@ def canny(image):
     array = cv.Canny(array,30,30, L2gradient = False)
     array = 255 - array
     return array
+
+
+
+def adaptive_mean(x, s, c):  #ideal s=19, c=5
+    mean_fil = np.ones(s)
+    mean_fil = mean_fil/(s*s)
+
+    [rows, cols] = np.shape(x)
+    pad = s // 2
+    rows = rows + 2 * pad
+    cols = cols + 2 * pad
+
+    new_img = np.zeros((rows, cols), dtype=np.uint8)
+    new_img[pad:rows - pad, pad:cols - pad] = x
+
+    fil_img = np.zeros((rows - 2*pad, cols - 2*pad), dtype=np.uint16)
+    for i in range(pad, rows - pad):
+        for j in range(pad, cols - pad):
+            temp = (new_img[i - pad:i + pad + 1, j - pad:j + pad + 1]) * mean_fil
+            mySum = np.sum(temp)
+            if new_img[i, j] <= mySum-c:
+                fil_img[i-pad, j-pad] = 0
+            else:
+                fil_img[i-pad, j-pad] = 255
+
+    fil_img = fil_img.astype(np.uint8)
+    cv.imwrite('Adaptive.jpg', fil_img)
+    [a, b]=np.shape(fil_img)
+    print(a,'x',b)
+
+
+
+def adaptive_median(x, s, c):
+
+    [rows, cols] = np.shape(x)
+    pad = s // 2
+    rows = rows + 2 * pad
+    cols = cols + 2 * pad
+
+    new_img = np.zeros((rows, cols), dtype=np.uint8)
+    new_img[pad:rows - pad, pad:cols - pad] = x
+
+    fil_img = np.zeros((rows - 2 * pad, cols - 2 * pad), dtype=np.uint16)
+    for i in range(pad, rows - pad):
+        for j in range(pad, cols - pad):
+            temp = (new_img[i - pad:i + pad + 1, j - pad:j + pad + 1])
+            temp = temp.flatten()
+            temp.sort()
+            length = len(temp)
+            if length%2 != 0:
+                ind = length//2
+                med = temp[ind]
+            else:
+                ind1 = length//2
+                ind2 = ind1-1
+                med = round((temp[ind1]+temp[ind2])/2)
+
+            if new_img[i, j] <= med-c:
+                fil_img[i-pad,j-pad] = 0
+            else:
+                fil_img[i-pad,j-pad] = 255
+
+    fil_img = fil_img.astype(np.uint8)
+
+
+
