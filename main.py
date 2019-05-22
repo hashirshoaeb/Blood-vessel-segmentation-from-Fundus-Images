@@ -4,8 +4,6 @@ import math as m
 import functions as f
 import operationfunctions as of
 import matplotlib.pyplot as plt
-# array1 = cv.imread("IM000001/IM000001--vessels.jpg", 0)
-# ret, tarray = cv.threshold(array1, 120, 255, cv.THRESH_BINARY)
 
 path = [["IM000001", "IM000001.JPG", "IM000001--vessels.jpg", "Morphology.jpg", "ConComp.jpg", "Adaptive.jpg", "Canny.jpg", "Gabor.jpg", "RegGrowing.jpg", "ColorMorphology.jpg", "ColorConComp.jpg", "ColorAdaptive.jpg", "ColorCanny.jpg", "ColorGabor.jpg", "ColorRegGrowing.jpg"],
         ["IM000004", "IM000004.JPG", "IM000004--vessels.jpg", "Morphology.jpg", "ConComp.jpg", "Adaptive.jpg", "Canny.jpg", "Gabor.jpg", "RegGrowing.jpg", "ColorMorphology.jpg", "ColorConComp.jpg", "ColorAdaptive.jpg", "ColorCanny.jpg", "ColorGabor.jpg", "ColorRegGrowing.jpg"],
@@ -40,17 +38,24 @@ for p in path:
     cv.imwrite(p[0]+"/"+p[12], cv.applyColorMap(out, cv.COLORMAP_HSV))
 
     # Adaptive thresholding
+    print("Start Adaptive Thresholding Operation")
     resAdaptive = cv.adaptiveThreshold(imageArray,255,cv.ADAPTIVE_THRESH_GAUSSIAN_C,cv.THRESH_BINARY,51,4)
     cv.imwrite(p[0] + "/" + p[5], resAdaptive)
     out = of.performancePrams(resAdaptive, vesselimage)
     cv.imwrite(p[0] + "/" + p[11], cv.applyColorMap(out, cv.COLORMAP_HSV))
 
+    #Connected Components
+#         steps:
+#             adaptive threshhold
+#             label distinct components
+#             give colour
 
 
 
 
 
 
+# Region Growing
 img = cv.imread('IM000001/IM000001.JPG', 0)
 
 def my_region_grow():
@@ -102,9 +107,14 @@ def my_region_grow():
             check_neighbours(x, y)
 
     region_grow()
-    my_region = np.invert(my_region)
-    cv.imwrite('Region.jpg', my_region)
 
+    vesselimage = cv.imread("IM000001/IM000001--vessels.jpg", 0)
+    ret, vesselimage = cv.threshold(vesselimage, 245, 255, cv.THRESH_BINARY)
+
+    my_region = np.invert(my_region)
+    of.performancePrams(my_region, vesselimage)
+    cv.imwrite('Region.jpg', my_region)
+my_region_grow()
 
 
 # img1 = cv.imread("IM000001/IM000001.JPG",0)
@@ -183,7 +193,8 @@ def my_region_grow():
 #
 # warr = np.dstack((arr,255-arr,255-arr))
 # cv.imwrite("nice.jpg", cv.applyColorMap(warr,cv.COLORMAP_HSV))
-
+# array1 = cv.imread("IM000001/IM000001--vessels.jpg", 0)
+# ret, tarray = cv.threshold(array1, 120, 255, cv.THRESH_BINARY)
 
 # /////     ---- LINKS ----    //////
 # https://datascience.stackexchange.com/questions/30589/how-to-interpret-fpr-and-tpr-in-roc-curve
