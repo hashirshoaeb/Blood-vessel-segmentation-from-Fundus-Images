@@ -230,3 +230,4 @@ my_region_grow()
 #
 #     gb = np.exp(-.5 * (x_theta * 2 / sigma_x * 2 + y_theta * 2 / sigma_y * 2)) * np.cos(2 * np.pi / Lambda * x_theta + psi)
 #     return gb
+# test
